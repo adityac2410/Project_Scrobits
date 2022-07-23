@@ -1,21 +1,54 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import logo from "./img/scrobit.png";
-import {Router ,Route, useNavigate} from "react-router-dom";
+import { Router, Route, useNavigate } from "react-router-dom";
+let vari;
+
 
 
 function App() {
   const navigate = useNavigate();
+  
+  function demo() {
+    // console.log("hello");
 
-    const navigateToDashboard = () => {
-      // 👇️ navigate to /contacts
-      navigate('/Dashboard');
+    var mail1 = document.getElementById('mail').value;
+    var pass1 = document.getElementById('pass').value;
+    
+    const url = "https://api-monitor.scrobits.com/api/v1/login";
+    let data = `{"password": ${pass1} ,"email" : ${mail1} }`;
+    data = JSON.parse(data);
+    const params = {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "*/*" },
+      body: data,
     };
+    fetch(url, params)
+    .then(async (res)=>{
+      if (res.status===200){
+        const response = await res.json()
+        // window.location.href = "/Dashboard";
+        console.log(response);
+        return data;
+      }
+      
+    })
+    .catch(err => console.log(err))
+    // return data;
+  }
+  
 
-    const navigateHome = () => {
-      // 👇️ navigate to /Home
-      navigate('/');
-    }
+  const navigateToDashboard = () => {
+    let data;
+
+    data = demo();
+    
+    navigate("/Dashboard");
+  };
+
+  const navigateHome = () => {
+    navigate("/");
+  };
   return (
     // Left side Heading / para -
     <div className="container">
@@ -40,28 +73,26 @@ function App() {
           {/* Login heading */}
           <h1>LOGIN</h1>
           {/* First text box (username) */}
+
           <div class="txt_field">
-            <input type="text" required></input>
-            <span>
-              
-            </span>
-            <label>username</label>
+            <input type="email" required id="mail"></input>
+            <span></span>
+            <label>email</label>
           </div>
 
           {/* Second text box (Password) */}
           <div class="txt_field">
-            <input type="password" required></input>
-            <span>
-
-            </span>
+            <input type="password" required id="pass"></input>
+            <span></span>
             <label>password</label>
-            
           </div>
           <br></br>
-          
+
           {/* Login Button */}
           <div className="btn-divv">
-            <button onClick={navigateToDashboard} className="btn">Login</button>
+            <button onClick={demo} className="btn">
+              Login
+            </button>
           </div>
         </form>
       </div>
